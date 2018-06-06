@@ -56,6 +56,7 @@
      <Compile Include="Assets\Actor\noticShowTrigger.cs" />
      <Compile Include="Assets\Actor\OwnLeavesNumberUpdate.cs" />
      <Compile Include="Assets\Actor\ProgressBar.cs" />
+     <Compile Include="Assets\Actor\TreeGrowth.cs" />
      <Compile Include="Assets\Actor\WaterButton.cs" />
      <Compile Include="Assets\background\ToShopButton.cs" />
      <Compile Include="Assets\background\ToTreeButton.cs" />

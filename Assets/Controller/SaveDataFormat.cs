@@ -10,6 +10,7 @@ public class SaveDataFormat
 
 	public SaveDataFormat (SaveDataFormat ori) {
 		this.supportID = ori.supportID;
+		this.registerTime = ori.registerTime;
 		this.lastWaterTime = new DateTime(ori.lastWaterTime.Year, ori.lastWaterTime.Month, 
 			ori.lastWaterTime.Day, ori.lastWaterTime.Hour, ori.lastWaterTime.Minute, 
 			ori.lastWaterTime.Second, ori.lastWaterTime.Millisecond);
@@ -23,6 +24,7 @@ public class SaveDataFormat
 
 	public void initialize() {
 		this.supportID = 0;
+		this.registerTime = new DateTime (1970, 1, 1);
 		this.lastWaterTime = new DateTime (1970, 1, 1);
 		this.lastDateTime = new DateTime (1970, 1, 1);
 		this.lastWeather = Weathers.NONE;
@@ -35,6 +37,7 @@ public class SaveDataFormat
 		
 	public static readonly string SavePath = Application.persistentDataPath + "/";
 	public int supportID;
+	public DateTime registerTime;
 	public DateTime lastWaterTime;
 	public DateTime lastDateTime;
 	public Weathers lastWeather;

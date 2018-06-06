@@ -90,6 +90,13 @@ public class SuperGameMaster : MonoBehaviour {
 	public static void LoadData () {
 		SuperGameMaster.saveData = SuperGameMaster.saveMgr.LoadData ("GameData.sav");
 		SuperGameMaster.deviceTime = DateTime.Now;
+		if (SuperGameMaster.saveData.registerTime == new DateTime (1970, 1, 1)) {
+			Debug.Log ("[SuperGameMaster] in loadData: the register time is init by 1970-1-1");
+			SuperGameMaster.saveData.registerTime = new DateTime (SuperGameMaster.deviceTime.Year, 
+				SuperGameMaster.deviceTime.Month, SuperGameMaster.deviceTime.Day, 
+				SuperGameMaster.deviceTime.Hour, SuperGameMaster.deviceTime.Minute, 
+				SuperGameMaster.deviceTime.Second, SuperGameMaster.deviceTime.Millisecond); 
+		}
 		if (SuperGameMaster.saveData.lastDateTime == new DateTime (1970, 1, 1)) {
 			Debug.Log ("[SuperGameMaster] in loadData: the last time you enter the game record is init by 1970-1-1");
 			SuperGameMaster.saveData.lastDateTime = new DateTime (SuperGameMaster.deviceTime.Year, 
@@ -117,6 +124,13 @@ public class SuperGameMaster : MonoBehaviour {
 			});
 			SuperGameMaster.timeErrorString = "[SuperGameMaster] in LoadData: return to last time, the next update is after" + str;
 		}
+		Debug.Log (string.Concat (new object [] {
+			"[SuperGameMaster] the time you register is:",
+			SuperGameMaster.saveData.registerTime.ToString(),
+			"delta-T is:",
+			SuperGameMaster.RegisterTime_SpanSec(),
+			"second"
+		}));
 		Debug.Log (string.Concat (new object [] {
 			"[SuperGameMaster] the last time you enter the game is:",
 			SuperGameMaster.saveData.lastDateTime.ToString(),
@@ -160,6 +174,14 @@ public class SuperGameMaster : MonoBehaviour {
 			return 0f;
 		}
 		return Mathf.Clamp ((float)(SuperGameMaster.deviceTime - SuperGameMaster.saveData.lastWaterTime)
+			.TotalSeconds, 0f, 2592000f);
+	}
+
+	public static float RegisterTime_SpanSec () {
+		if (SuperGameMaster.timeError) {
+			return 0f;
+		}
+		return Mathf.Clamp ((float)(SuperGameMaster.deviceTime - SuperGameMaster.saveData.registerTime)
 			.TotalSeconds, 0f, 2592000f);
 	}
 		

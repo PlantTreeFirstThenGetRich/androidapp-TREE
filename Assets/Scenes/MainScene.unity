@@ -534,6 +534,7 @@ GameObject:
   - component: {fileID: 841345615}
   - component: {fileID: 841345614}
   - component: {fileID: 841345616}
+  - component: {fileID: 841345617}
   m_Layer: 0
   m_Name: Tree
   m_TagString: Untagged
@@ -575,7 +576,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300006, guid: 6175c3ca208eeb146b4e00571e8b27e2, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -583,7 +584,7 @@ SpriteRenderer:
   m_Size: {x: 2.56, y: 2.88}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
 --- !u!4 &841345615
 Transform:
@@ -611,6 +612,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LeafButtonTemplate: {fileID: 114490300390938640, guid: 284b5f047b09063409f7453be46bb73e,
     type: 2}
+--- !u!114 &841345617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 841345613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3295205f542973741a98282577fdce04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: 21300006, guid: 6175c3ca208eeb146b4e00571e8b27e2, type: 3}
+  - {fileID: 21300000, guid: 6175c3ca208eeb146b4e00571e8b27e2, type: 3}
+  - {fileID: 21300004, guid: 6175c3ca208eeb146b4e00571e8b27e2, type: 3}
+  - {fileID: 21300002, guid: 6175c3ca208eeb146b4e00571e8b27e2, type: 3}
 --- !u!1 &942087693
 GameObject:
   m_ObjectHideFlags: 0
