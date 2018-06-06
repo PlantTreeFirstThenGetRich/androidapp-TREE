@@ -22,6 +22,7 @@ public class SuperGameMaster : MonoBehaviour {
 			SceneManager.sceneLoaded += new UnityAction<Scene, LoadSceneMode> (this.OnSceneLoaded);
 			SceneManager.sceneUnloaded += new UnityAction<Scene> (this.OnSceneUnloaded);
 			SuperGameMaster.saveMgr = base.GetComponent<SaveManager> ();
+
 			SuperGameMaster.nowLoading = false;
 			base.StartCoroutine ("initLoading");
 		} else {
@@ -37,8 +38,38 @@ public class SuperGameMaster : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-		
+		Scenes nowScene = SuperGameMaster.NowScene;
+		if (nowScene != Scenes._Reload) {
+			if (nowScene == Scenes.InitScene) {
+				if (!SuperGameMaster.nowLoading) {
+					SuperGameMaster.setNextScene (SuperGameMaster.StartScene);
+				}
+			}
+		} 
+		else {
+			SuperGameMaster.NextScene = Scenes.InitScene;
+			SuperGameMaster.nowLoading = false;
+			base.StartCoroutine ("initLoading");
+		}
+		if (SuperGameMaster.NextScene != Scenes.NONE) {
+			Scenes nextScene = SuperGameMaster.NextScene;
+			switch (nextScene) {
+			case Scenes.InitScene:
+				SceneManager.LoadSceneAsync ("InitScene");
+				break;
+			case Scenes.MainScene:
+				SceneManager.LoadSceneAsync ("MainScene");
+				break;
+			case Scenes.ShopScene:
+				SceneManager.LoadSceneAsync ("ShopScene");
+				break;
+			default:
+				break;
+			}
+			SuperGameMaster.NowScene = nextScene;
+			SuperGameMaster.NextScene = Scenes.NONE;
+		}
+		SuperGameMaster.GameTimer += Time.deltaTime;
 	}
 
 	private void OnActiveSceneChanged(Scene i_preChangedScene, Scene i_postChangedScene) {
@@ -60,7 +91,15 @@ public class SuperGameMaster : MonoBehaviour {
 		SuperGameMaster.saveData = SuperGameMaster.saveMgr.LoadData ("GameData.sav");
 		SuperGameMaster.deviceTime = DateTime.Now;
 		if (SuperGameMaster.saveData.lastDateTime == new DateTime (1970, 1, 1)) {
+			Debug.Log ("[SuperGameMaster] in loadData: the last time you enter the game record is init by 1970-1-1");
 			SuperGameMaster.saveData.lastDateTime = new DateTime (SuperGameMaster.deviceTime.Year, 
+				SuperGameMaster.deviceTime.Month, SuperGameMaster.deviceTime.Day, 
+				SuperGameMaster.deviceTime.Hour, SuperGameMaster.deviceTime.Minute, 
+				SuperGameMaster.deviceTime.Second, SuperGameMaster.deviceTime.Millisecond); 
+		}
+		if (SuperGameMaster.saveData.lastWaterTime == new DateTime (1970, 1, 1)) {
+			Debug.Log ("[SuperGameMaster] in loadData: the last time you water record is init by 1970-1-1");
+			SuperGameMaster.saveData.lastWaterTime = new DateTime (SuperGameMaster.deviceTime.Year, 
 				SuperGameMaster.deviceTime.Month, SuperGameMaster.deviceTime.Day, 
 				SuperGameMaster.deviceTime.Hour, SuperGameMaster.deviceTime.Minute, 
 				SuperGameMaster.deviceTime.Second, SuperGameMaster.deviceTime.Millisecond); 
@@ -75,8 +114,7 @@ public class SuperGameMaster : MonoBehaviour {
 				SuperGameMaster.saveData.lastDateTime.Month,
 				SuperGameMaster.saveData.lastDateTime.Day,
 				SuperGameMaster.saveData.lastDateTime.ToShortTimeString()
-			}
-			);
+			});
 			SuperGameMaster.timeErrorString = "[SuperGameMaster] in LoadData: return to last time, the next update is after" + str;
 		}
 		Debug.Log (string.Concat (new object [] {
@@ -86,6 +124,25 @@ public class SuperGameMaster : MonoBehaviour {
 			SuperGameMaster.LastTime_SpanSec(),
 			"second"
 		}));
+		Debug.Log (string.Concat (new object [] {
+			"[SuperGameMaster] the last time you water is:",
+			SuperGameMaster.saveData.lastWaterTime.ToString(),
+			"delta-T is:",
+			SuperGameMaster.WaterTime_SpanSec(),
+			"second"
+		}));
+	}
+
+	public static void SaveData() {
+		if (!SuperGameMaster.timeError) {
+			SuperGameMaster.saveData.lastDateTime = new DateTime (SuperGameMaster.deviceTime.Year, 
+				SuperGameMaster.deviceTime.Month, SuperGameMaster.deviceTime.Day, 
+				SuperGameMaster.deviceTime.Hour, SuperGameMaster.deviceTime.Minute, 
+				SuperGameMaster.deviceTime.Second, SuperGameMaster.deviceTime.Millisecond);
+		} else {
+			Debug.Log ("[SuperGameMaster] in SaveData: time error! don't save time");
+		}
+		SuperGameMaster.saveMgr.SaveData ("GameData.sav", new SaveDataFormat(SuperGameMaster.saveData));
 	}
 
 
@@ -98,8 +155,15 @@ public class SuperGameMaster : MonoBehaviour {
 			.TotalSeconds, 0f, 2592000f);
 	}
 
-	// TODO: not totally understand the meaning of timeSpanSec
-	// maybe the time to next generate
+	public static float WaterTime_SpanSec () {
+		if (SuperGameMaster.timeError) {
+			return 0f;
+		}
+		return Mathf.Clamp ((float)(SuperGameMaster.deviceTime - SuperGameMaster.saveData.lastWaterTime)
+			.TotalSeconds, 0f, 2592000f);
+	}
+		
+	// update the leaves time to next generate
 	public static void MathTime_Leaf (int addTimer) {
 		// the min time in all leaf
 		int num = int.MaxValue;
@@ -130,10 +194,19 @@ public class SuperGameMaster : MonoBehaviour {
 		}
 	}
 
+	public static void MathTime_Water (int addTimer) {
+		// TODO: add the weather judge
+		if (SuperGameMaster.WaterNeeded == false) {
+			if (addTimer > SuperGameMaster.InitWaterTimeNeeded) {
+				SuperGameMaster.WaterNeeded = true;
+			}
+		}
+	}
+
 	private IEnumerator initLoading () {
 		SuperGameMaster.nowLoading = true;
 		SuperGameMaster.LoadingProgress = 0f;
-		this.init ();
+		this.init();
 		// Hold off one frame and proceed to the next.
 		yield return null;
 		SuperGameMaster.LoadData ();
@@ -142,6 +215,9 @@ public class SuperGameMaster : MonoBehaviour {
 		if (!SuperGameMaster.timeError) {
 			SuperGameMaster.MathTime_Leaf ((int)SuperGameMaster.LastTime_SpanSec ());
 			SuperGameMaster.LoadingProgress = 60f;
+			yield return null;
+			SuperGameMaster.MathTime_Water ((int)SuperGameMaster.WaterTime_SpanSec ());
+			SuperGameMaster.LoadingProgress = 80f;
 			yield return null;
 		}
 		SuperGameMaster.LoadingProgress = 100f;
@@ -156,11 +232,11 @@ public class SuperGameMaster : MonoBehaviour {
 
 	private static bool create_SuperMaster;
 
-	public static Scenes NowScene;
+	public static Scenes NowScene = Scenes.InitScene;
 	public static Scenes NextScene = Scenes.NONE;
-	public static Scenes PrevScene = Scenes.Main;
-	public static Scenes StartScene = Scenes.Main;
-	public static Scenes DefaultScene = Scenes.Main;
+	public static Scenes PrevScene = Scenes.MainScene;
+	public static Scenes StartScene = Scenes.MainScene;
+	public static Scenes DefaultScene = Scenes.MainScene;
 
 	public static bool nowLoading;
 	public static float LoadingProgress;
@@ -172,4 +248,10 @@ public class SuperGameMaster : MonoBehaviour {
 
 	public static SaveDataFormat saveData;
 	public static SaveManager saveMgr;
+
+	public static int InitLeafGenerateTime = 180;
+	public static int InitTotalLeadNumber = 3;
+
+	public static bool WaterNeeded = false;
+	public static int InitWaterTimeNeeded = 180;
 }

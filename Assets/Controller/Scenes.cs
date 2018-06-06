@@ -3,8 +3,9 @@
 public enum Scenes
 {
 	NONE = -1,
-	Main,
-	Shop,
-	Login
+	MainScene,
+	ShopScene,
+	InitScene,
+	_Reload
 }
 

@@ -51,14 +51,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Actor\TreeGrouth.cs" />
-     <Compile Include="Assets\Controller\GameMaster.cs" />
+     <Compile Include="Assets\Actor\collectLeaves.cs" />
+     <Compile Include="Assets\Actor\createLeaves.cs" />
+     <Compile Include="Assets\Actor\noticShowTrigger.cs" />
+     <Compile Include="Assets\Actor\OwnLeavesNumberUpdate.cs" />
+     <Compile Include="Assets\Actor\ProgressBar.cs" />
+     <Compile Include="Assets\Actor\WaterButton.cs" />
+     <Compile Include="Assets\background\ToShopButton.cs" />
+     <Compile Include="Assets\background\ToTreeButton.cs" />
      <Compile Include="Assets\Controller\LeafDataFormat.cs" />
      <Compile Include="Assets\Controller\SaveDataFormat.cs" />
      <Compile Include="Assets\Controller\SaveManager.cs" />
      <Compile Include="Assets\Controller\Scenes.cs" />
      <Compile Include="Assets\Controller\SuperGameMaster.cs" />
-     <Compile Include="Assets\Controller\UIMaster.cs" />
      <Compile Include="Assets\Controller\Weathers.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

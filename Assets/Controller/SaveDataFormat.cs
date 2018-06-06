@@ -18,14 +18,19 @@ public class SaveDataFormat
 			ori.lastDateTime.Second, ori.lastDateTime.Millisecond);
 		this.lastWeather = ori.lastWeather;
 		this.LeafList = new List<LeafDataFormat> (ori.LeafList);
+		this.OwnLeaveNumber = ori.OwnLeaveNumber;
 	}
 
 	public void initialize() {
 		this.supportID = 0;
-		this.lastWaterTime = new DateTime ();
+		this.lastWaterTime = new DateTime (1970, 1, 1);
 		this.lastDateTime = new DateTime (1970, 1, 1);
 		this.lastWeather = Weathers.NONE;
 		this.LeafList = new List<LeafDataFormat> ();
+		for (int i = 0; i < SuperGameMaster.InitTotalLeadNumber; i++) {
+			this.LeafList.Add (new LeafDataFormat ());
+		}
+		this.OwnLeaveNumber = 0;
 	}
 		
 	public static readonly string SavePath = Application.persistentDataPath + "/";
@@ -34,6 +39,8 @@ public class SaveDataFormat
 	public DateTime lastDateTime;
 	public Weathers lastWeather;
 	public List<LeafDataFormat> LeafList;
+
+	public int OwnLeaveNumber;
 
 
 
