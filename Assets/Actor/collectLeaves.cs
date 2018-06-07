@@ -24,5 +24,6 @@ public class collectLeaves : MonoBehaviour {
 		SuperGameMaster.saveData.LeafList [leafindex].timeSpanSec = SuperGameMaster.InitLeafGenerateTime;
 		// destory the leaf object
 		Destroy (this.gameObject);
+		SuperGameMaster.SaveDataToFile ();
 	}
 }

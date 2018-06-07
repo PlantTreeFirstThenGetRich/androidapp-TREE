@@ -35,8 +35,9 @@ public class SaveManager : MonoBehaviour
 				BinaryFormatter binaryFormatter = new BinaryFormatter();
 				saveDataFormat = (binaryFormatter.Deserialize(fileStream) as SaveDataFormat);
 			}
+			Debug.Log("[SaveManager] in LoadData: the last time you enter the game is: " + saveDataFormat.lastDateTime);
+			Debug.Log("[SaveManager] in LoadData: the time you register the game is: " + saveDataFormat.registerTime);
 			Debug.Log("[SaveManager] load data finished.");
-			Debug.Log("[SaveManager] backup data.");
 			if (saveDataFormat != null) {
 				this.SaveData(lName + ".back", new SaveDataFormat(saveDataFormat));
 			}

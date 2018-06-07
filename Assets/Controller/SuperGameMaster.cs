@@ -125,13 +125,6 @@ public class SuperGameMaster : MonoBehaviour {
 			SuperGameMaster.timeErrorString = "[SuperGameMaster] in LoadData: return to last time, the next update is after" + str;
 		}
 		Debug.Log (string.Concat (new object [] {
-			"[SuperGameMaster] the time you register is:",
-			SuperGameMaster.saveData.registerTime.ToString(),
-			"delta-T is:",
-			SuperGameMaster.RegisterTime_SpanSec(),
-			"second"
-		}));
-		Debug.Log (string.Concat (new object [] {
 			"[SuperGameMaster] the last time you enter the game is:",
 			SuperGameMaster.saveData.lastDateTime.ToString(),
 			"delta-T is:",
@@ -147,18 +140,9 @@ public class SuperGameMaster : MonoBehaviour {
 		}));
 	}
 
-	public static void SaveData() {
-		if (!SuperGameMaster.timeError) {
-			SuperGameMaster.saveData.lastDateTime = new DateTime (SuperGameMaster.deviceTime.Year, 
-				SuperGameMaster.deviceTime.Month, SuperGameMaster.deviceTime.Day, 
-				SuperGameMaster.deviceTime.Hour, SuperGameMaster.deviceTime.Minute, 
-				SuperGameMaster.deviceTime.Second, SuperGameMaster.deviceTime.Millisecond);
-		} else {
-			Debug.Log ("[SuperGameMaster] in SaveData: time error! don't save time");
-		}
+	public static void SaveDataToFile() {
 		SuperGameMaster.saveMgr.SaveData ("GameData.sav", new SaveDataFormat(SuperGameMaster.saveData));
 	}
-
 
 	// time to last open the game
 	public static float LastTime_SpanSec () {
@@ -174,14 +158,6 @@ public class SuperGameMaster : MonoBehaviour {
 			return 0f;
 		}
 		return Mathf.Clamp ((float)(SuperGameMaster.deviceTime - SuperGameMaster.saveData.lastWaterTime)
-			.TotalSeconds, 0f, 2592000f);
-	}
-
-	public static float RegisterTime_SpanSec () {
-		if (SuperGameMaster.timeError) {
-			return 0f;
-		}
-		return Mathf.Clamp ((float)(SuperGameMaster.deviceTime - SuperGameMaster.saveData.registerTime)
 			.TotalSeconds, 0f, 2592000f);
 	}
 		
@@ -225,6 +201,10 @@ public class SuperGameMaster : MonoBehaviour {
 		}
 	}
 
+	public static void MathTime_Growth (int addTimer) {
+		SuperGameMaster.saveData.treeGrowthTimeSec += addTimer;
+	}
+
 	private IEnumerator initLoading () {
 		SuperGameMaster.nowLoading = true;
 		SuperGameMaster.LoadingProgress = 0f;
@@ -241,7 +221,20 @@ public class SuperGameMaster : MonoBehaviour {
 			SuperGameMaster.MathTime_Water ((int)SuperGameMaster.WaterTime_SpanSec ());
 			SuperGameMaster.LoadingProgress = 80f;
 			yield return null;
+			SuperGameMaster.MathTime_Growth ((int)SuperGameMaster.LastTime_SpanSec ());
+			SuperGameMaster.LoadingProgress = 90f;
+			yield return null;
 		}
+		if (!SuperGameMaster.timeError) {
+			Debug.Log ("[SuperGameMaster]: in initLoading: no time error and updata the last time play by device time.");
+			SuperGameMaster.saveData.lastDateTime = new DateTime (SuperGameMaster.deviceTime.Year, 
+				SuperGameMaster.deviceTime.Month, SuperGameMaster.deviceTime.Day, 
+				SuperGameMaster.deviceTime.Hour, SuperGameMaster.deviceTime.Minute, 
+				SuperGameMaster.deviceTime.Second, SuperGameMaster.deviceTime.Millisecond);
+		} else {
+			Debug.Log ("[SuperGameMaster] in initLoading: time error! don't save time");
+		}
+		SuperGameMaster.SaveDataToFile ();
 		SuperGameMaster.LoadingProgress = 100f;
 		yield return null;
 		SuperGameMaster.nowLoading = false;

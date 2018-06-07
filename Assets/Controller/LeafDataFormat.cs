@@ -7,7 +7,8 @@ public class LeafDataFormat
 	public LeafDataFormat () {
 		// random select x position
 		int rngNum = this.GenerateRandomValue();
-		this.x = (float)((rngNum % 100 / 100.0 - 0.5) * 6);
+		this.x = (float)((rngNum % 100 / 100.0) * 3);
+		//this.x = (float)(rngNum % 100 / 100.0);
 		this.y = -3;
 		// generate after 3 minute;
 		this.timeSpanSec = SuperGameMaster.InitLeafGenerateTime;

@@ -24,6 +24,7 @@ public class WaterButton : MonoBehaviour {
 				currentTime.Month, currentTime.Day, 
 				currentTime.Hour, currentTime.Minute, 
 				currentTime.Second, currentTime.Millisecond);
+			SuperGameMaster.SaveDataToFile ();
 		} else {
 			// message box notice can't water
 			Debug.Log("Can't water now.");
