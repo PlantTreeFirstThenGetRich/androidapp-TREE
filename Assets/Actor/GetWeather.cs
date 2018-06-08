@@ -31,18 +31,29 @@ public class GetWeather : MonoBehaviour {
     // Use this for initialization
     void Start () {
         // txLocation = GameObject.Find("Canvas/Text").GetComponent<Text>();
-        StartCoroutine(GetLocation());
-
-        // txCity = GameObject.Find("Canvas/Text0").GetComponent<Text>();
-        // txTemp = GameObject.Find("Canvas/Text1").GetComponent<Text>();
-        txWeather = GameObject.Find("Canvas/Weather").GetComponent<Text>();
-        // imWeather = GameObject.Find("Canvas/Image").GetComponent<Image>();
-
-        if (myCity.Length != 0)
+        if(Application.internetReachability == NetworkReachability.NotReachable)
         {
-            Debug.Log("----Start myCity=" + myCity);
+            // without network
+            Debug.Log("======Without network======");
         }
-        UpdateWeather();
+        else
+        {
+            Debug.Log("======With network======");
+            StartCoroutine(GetLocation());
+
+            // txCity = GameObject.Find("Canvas/Text0").GetComponent<Text>();
+            // txTemp = GameObject.Find("Canvas/Text1").GetComponent<Text>();
+            txWeather = GameObject.Find("Canvas/Weather").GetComponent<Text>();
+            // imWeather = GameObject.Find("Canvas/Image").GetComponent<Image>();
+
+            if (myCity.Length != 0)
+            {
+                Debug.Log("----Start myCity=" + myCity);
+            }
+            UpdateWeather();
+        }
+
+        
     }
 	
 	// Update is called once per frame
