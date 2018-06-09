@@ -5,6 +5,7 @@ using LitJson;
 using System.Text;
 using System.IO;
 using UnityEngine.UI;
+using System;
 
 public class GetWeather : MonoBehaviour {
 
@@ -24,60 +25,63 @@ public class GetWeather : MonoBehaviour {
     public Text txWeather;
     // public Image imWeather;
 
-    // private DateTime dNow;
-    // private float deltaTimeforWeather = 0.0f; // update Weather
-    // private float howlongToUpdate = 3600f;
+    private bool net_state = false;
+    private DateTime dNow;
+    private float deltaTimeforWeather = 0.0f; // update Weather
+    private float howlongToUpdate = 5.0f; // 60f表示一分钟  3600f表示一小时
 
     // Use this for initialization
     void Start () {
-        // txLocation = GameObject.Find("Canvas/Text").GetComponent<Text>();
-        if(Application.internetReachability == NetworkReachability.NotReachable)
+        txWeather = GameObject.Find("Canvas/Weather").GetComponent<Text>();
+
+        if (Application.internetReachability == NetworkReachability.NotReachable)
         {
-            // without network
+            // TODO: without network——读取本地文件
+            net_state = false;
             Debug.Log("======Without network======");
         }
         else
         {
+            // TOD0: 将天气状况保存在本地
+            net_state = true;
             Debug.Log("======With network======");
             StartCoroutine(GetLocation());
-
-            // txCity = GameObject.Find("Canvas/Text0").GetComponent<Text>();
-            // txTemp = GameObject.Find("Canvas/Text1").GetComponent<Text>();
-            txWeather = GameObject.Find("Canvas/Weather").GetComponent<Text>();
             // imWeather = GameObject.Find("Canvas/Image").GetComponent<Image>();
-
             if (myCity.Length != 0)
             {
                 Debug.Log("----Start myCity=" + myCity);
             }
-            UpdateWeather();
+            StartCoroutine(GetWeatherIE());
         }
-
-        
     }
 	
 	// Update is called once per frame
 	void Update () {
-        /*try
+        if(net_state == false)
         {
+            // Start时没有联网才会不断判断网络状况
             dNow = System.DateTime.Now;
-            Debug.Log("-------------" + dNow.ToString());
-            txTime.text = dNow.ToString("yyyy年MM月dd日") + dow[System.Convert.ToInt16(dNow.DayOfWeek)];
-            txHour.text = dNow.ToString("HH");
-            txMinute.text = dNow.ToString("mm");
-        } catch(Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }*/
-
-
-        /*
-        deltaTimeforWeather += Time.deltaTime;
-        if (deltaTimeforWeather > howlongToUpdate)//每一小时更新一次  
-        {
-            UpdateWeather();
-            deltaTimeforWeather = 0.0f;
-        }*/
+            // Debug.Log("-------------" + dNow.ToString());
+            deltaTimeforWeather += Time.deltaTime;
+            // Debug.Log("deltaTimeforWeather=" + deltaTimeforWeather);
+            if (deltaTimeforWeather > howlongToUpdate)
+            {
+                // Debug.Log("deltaTimeforWeather > howlongToUpdate");
+                if (Application.internetReachability == NetworkReachability.NotReachable)
+                {
+                    return;
+                }
+                else
+                {
+                    // 从没有网变为有网
+                    Debug.Log("----------Network changed");
+                    net_state = true;
+                    txWeather.text = "正在获取天气状态";
+                    StartCoroutine(GetLocation());
+                    StartCoroutine(GetWeatherIE());
+                }
+            }
+        }
     }
 
     public void UpdateWeather()
@@ -87,6 +91,7 @@ public class GetWeather : MonoBehaviour {
 
     IEnumerator GetLocation()
     {
+        Debug.Log("---------GetLocation");
         if (c_url != null)
         {
             WWW www = new WWW(c_url);
@@ -99,13 +104,13 @@ public class GetWeather : MonoBehaviour {
                 JsonData cityDetail = cityInfo["address_detail"];
                 myCity = cityDetail["city"].ToString();
                 Debug.Log("GetLocation myCity=" + myCity);
-                // txLocation.text = "定位：" + myCity;
             }
         }
     }
 
     IEnumerator GetWeatherIE()
     {
+        Debug.Log("---------GetWeather");
         while (myCity.Length == 0)
         {
             yield return null;
@@ -116,14 +121,6 @@ public class GetWeather : MonoBehaviour {
             var gb2312 = Encoding.GetEncoding("GB2312");
             string jsonFile = Application.dataPath + "/Resources/cityCode.json";
             Debug.Log("----jsonFile" + jsonFile); // TODO: apk拿不到路径
-            if (File.Exists(jsonFile))
-            {
-                // txTemp.text = "jsonFile exists" + jsonFile;
-            }
-            else
-            {
-                // txTemp.text = "NO " + jsonFile;
-            }
             StreamReader sr = new StreamReader(jsonFile, gb2312, true);
             string allCityCodeStr = sr.ReadToEnd();
             sr.Close();
@@ -137,12 +134,10 @@ public class GetWeather : MonoBehaviour {
                 JsonData jsonProvince = allCityCode[i];
                 JsonData jsonCity = jsonProvince["city"];
                 bool found = false;
-                // Debug.Log("----- i = " + i + "  " + jsonProvince["province"].ToString() + "   " + found);
                 for (var j = 0; j < jsonCity.Count; j++)
                 {
                     JsonData temp1 = jsonCity[j];
                     string myCityName = temp1["cityName"].ToString();
-                    // Debug.Log("----- j = " + j + "  " + myCityName + "   " + found);
                     if (myCityName.Contains(myCity) || myCity.Contains(myCityName))
                     {
                         Debug.Log("----遍历cityCode.json myCityName=" + myCityName);
@@ -164,21 +159,17 @@ public class GetWeather : MonoBehaviour {
             {
                 yield return www;
             }
-
             if (www.text != null)
             {
                 JsonData jd = JsonMapper.ToObject(www.text);
                 JsonData jdInfo = jd["weatherinfo"];
                 Debug.Log(jdInfo);
-                // txCity.text = jdInfo["city"].ToString();
                 string result_city = jdInfo["city"].ToString();
                 string strLow = jdInfo["temp1"].ToString();
                 string strHigh = jdInfo["temp2"].ToString();
-                // txTemp.text = strLow + "~" + strHigh;
                 string result_temp = strLow + "~" + strHigh;
                 string result_weather = jdInfo["weather"].ToString();
                 txWeather.text = result_city + " " + result_weather + " " + result_temp;
-                // txWeather.text = jdInfo["weather"].ToString();
                 Debug.Log(jdInfo["img1"].ToString());
                 // string imagePath = "./Resources/" + jdInfo["img1"].ToString();
                 /* string imagePath = Application.dataPath + "/Resources/no.gif";
