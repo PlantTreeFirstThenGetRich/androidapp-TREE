@@ -39,6 +39,7 @@ public class GetWeather : MonoBehaviour {
             // TODO: without network——读取本地文件
             net_state = false;
             Debug.Log("======Without network======");
+            // txWeather.text = SuperGameMaster.saveData.LastWeather.ToString();
         }
         else
         {
