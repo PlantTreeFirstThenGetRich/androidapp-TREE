@@ -4,9 +4,9 @@ public enum Weathers
 {
 	NONE = -1,
 	Sunny,
-	HeavyRain,
-	LightRain,
-	Snowy,
-	Hot
+    Cloudy,
+    Hot,
+    Rain,
+	Snowy
 }
 

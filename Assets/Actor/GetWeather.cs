@@ -39,7 +39,7 @@ public class GetWeather : MonoBehaviour {
             // TODO: without network——读取本地文件
             net_state = false;
             Debug.Log("======Without network======");
-            // txWeather.text = SuperGameMaster.saveData.LastWeather.ToString();
+            txWeather.text = "R:" + SuperGameMaster.saveData.lastWeather.ToString() + "连网以更新天气";
         }
         else
         {
@@ -67,7 +67,7 @@ public class GetWeather : MonoBehaviour {
             // Debug.Log("deltaTimeforWeather=" + deltaTimeforWeather);
             if (deltaTimeforWeather > howlongToUpdate)
             {
-                // Debug.Log("deltaTimeforWeather > howlongToUpdate");
+                Debug.Log("deltaTimeforWeather > howlongToUpdate");
                 if (Application.internetReachability == NetworkReachability.NotReachable)
                 {
                     return;
@@ -165,14 +165,12 @@ public class GetWeather : MonoBehaviour {
                 JsonData jd = JsonMapper.ToObject(www.text);
                 JsonData jdInfo = jd["weatherinfo"];
                 Debug.Log(jdInfo);
-                string result_city = jdInfo["city"].ToString();
+                string resultCity = jdInfo["city"].ToString();
                 string strLow = jdInfo["temp1"].ToString();
                 string strHigh = jdInfo["temp2"].ToString();
-                string result_temp = strLow + "~" + strHigh;
-                string result_weather = jdInfo["weather"].ToString();
-                txWeather.text = result_city + " " + result_weather + " " + result_temp;
-                Debug.Log(jdInfo["img1"].ToString());
-                // string imagePath = "./Resources/" + jdInfo["img1"].ToString();
+                string resultTemp = strLow + "~" + strHigh;
+                string resultWeather = jdInfo["weather"].ToString();
+                txWeather.text = resultCity + " " + resultWeather + " " + resultTemp;
                 /* string imagePath = Application.dataPath + "/Resources/no.gif";
                 byte[] imageByte = File.ReadAllBytes(imagePath);
                 Texture2D imageTexture = new Texture2D(1, 1);
@@ -181,7 +179,47 @@ public class GetWeather : MonoBehaviour {
                     Sprite imageSprite = Sprite.Create(imageTexture, new Rect(0, 0, imageTexture.width, imageTexture.height), new Vector2(0, 0));
                     imWeather.sprite = imageSprite;
                 } */
+                double tempMax = Convert.ToDouble(System.Text.RegularExpressions.Regex.Replace(strHigh, "[℃]", ""));
+                saveWeatherToFile(tempMax, resultWeather);
             }
         }
+    }
+
+    public void saveWeatherToFile(double t, string w)
+    {
+        if (w.Contains("晴"))
+        {
+            if (t > 29)
+            {
+                SuperGameMaster.saveData.lastWeather = Weathers.Hot;
+                Debug.Log("更新为Hot");
+            }
+            else
+            {
+                SuperGameMaster.saveData.lastWeather = Weathers.Sunny;
+                Debug.Log("更新为Sunny");
+            }
+        }
+        else if (w.Contains("雨"))
+        {
+            SuperGameMaster.saveData.lastWeather = Weathers.Rain;
+            Debug.Log("更新为Rain");
+        }
+        else if (w.Contains("雪"))
+        {
+            SuperGameMaster.saveData.lastWeather = Weathers.Snowy;
+            Debug.Log("更新为Snowy");
+        }
+        else if (w.Contains("多云") || w.Contains("阴"))
+        {
+            SuperGameMaster.saveData.lastWeather = Weathers.Cloudy;
+            Debug.Log("更新为Cloudy");
+        }
+        else
+        {
+            SuperGameMaster.saveData.lastWeather = Weathers.Sunny;
+            Debug.Log("更新为Sunny");
+        }
+        SuperGameMaster.SaveDataToFile();
     }
 }

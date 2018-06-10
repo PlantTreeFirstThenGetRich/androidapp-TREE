@@ -32,6 +32,7 @@ public class SaveDataFormat
 		this.lastWaterTime = new DateTime (1970, 1, 1);
 		this.lastDateTime = new DateTime (1970, 1, 1);
 		this.lastWeather = Weathers.NONE;
+        Debug.Log("SavePath = " + Application.persistentDataPath + "/");
 		this.LeafList = new List<LeafDataFormat> ();
 		for (int i = 0; i < SuperGameMaster.InitTotalLeadNumber; i++) {
 			this.LeafList.Add (new LeafDataFormat ());
