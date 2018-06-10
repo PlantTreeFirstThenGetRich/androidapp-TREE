@@ -193,11 +193,28 @@ public class SuperGameMaster : MonoBehaviour {
 	}
 
 	public static void MathTime_Water (int addTimer) {
-		// TODO: add the weather judge
 		if (SuperGameMaster.WaterNeeded == false) {
-			if (addTimer > SuperGameMaster.InitWaterTimeNeeded) {
-				SuperGameMaster.WaterNeeded = true;
-			}
+            Debug.Log("--------SuperGameMaster.InitWaterTimeNeeded" + SuperGameMaster.InitWaterTimeNeeded);
+            if(SuperGameMaster.saveData.lastWeather == Weathers.Hot)
+            {
+                if (addTimer > SuperGameMaster.InitWaterTimeNeeded / 2)
+                {
+                    SuperGameMaster.WaterNeeded = true;
+                }
+            } else if(SuperGameMaster.saveData.lastWeather == Weathers.Rain || SuperGameMaster.saveData.lastWeather == Weathers.Snowy)
+            {
+                if (addTimer > SuperGameMaster.InitWaterTimeNeeded * 2)
+                {
+                    SuperGameMaster.WaterNeeded = true;
+                }
+            } else
+            {
+                if (addTimer > SuperGameMaster.InitWaterTimeNeeded)
+                {
+                    SuperGameMaster.WaterNeeded = true;
+                }
+            }
+            
 		}
 	}
 
