@@ -2,4 +2,5 @@
 *.meta
 *.cache
 Library/
+Library/metadata/
 Temp/
