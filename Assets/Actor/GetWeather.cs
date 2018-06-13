@@ -19,9 +19,7 @@ public class GetWeather : MonoBehaviour {
     public string cityCode = "";
     public string cityCodeJson = "";
 
-    // Weather  
-    // public Text txCity;
-    // public Text txTemp;
+    // Weather
     public Text txWeather;
     // public Image imWeather;
 
@@ -34,7 +32,7 @@ public class GetWeather : MonoBehaviour {
     void Start () {
         txWeather = GameObject.Find("Canvas/Weather").GetComponent<Text>();
 
-        if (Application.internetReachability == NetworkReachability.NotReachable)
+        if (Application.internetReachability == NetworkReachability.NotReachable || true)
         {
             // TODO: without network——读取本地文件
             net_state = false;

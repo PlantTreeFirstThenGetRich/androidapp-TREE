@@ -22,7 +22,8 @@ public class collectLeaves : MonoBehaviour {
 		int leafindex = int.Parse (base.name.Substring (nameLength - 1, 1));
 		SuperGameMaster.saveData.LeafList [leafindex].newFlag = false;
 		SuperGameMaster.saveData.LeafList [leafindex].timeSpanSec = SuperGameMaster.InitLeafGenerateTime;
-		// destory the leaf object
+        SuperGameMaster.saveData.OwnLeaveNumber += 1;
+        // destory the leaf object
 		Destroy (this.gameObject);
 		SuperGameMaster.SaveDataToFile ();
 	}
