@@ -23,6 +23,7 @@ public class SaveDataFormat
 		this.LeafList = new List<LeafDataFormat> (ori.LeafList);
 		this.OwnLeaveNumber = ori.OwnLeaveNumber;
 		this.treeGrowthTimeSec = ori.treeGrowthTimeSec;
+		this.Item = ori.Item;
 	}
 
 	public void initialize() {
@@ -38,6 +39,10 @@ public class SaveDataFormat
 			this.LeafList.Add (new LeafDataFormat ());
 		}
 		this.OwnLeaveNumber = 0;
+		this.Item.name = "Nest";
+		this.Item.price = 100;
+		this.Item.onStock = true;
+		this.Item.isUsed = false;
 	}
 		
 	public static readonly string SavePath = Application.persistentDataPath + "/";
@@ -48,7 +53,7 @@ public class SaveDataFormat
 	public DateTime lastDateTime;
 	public Weathers lastWeather;
 	public List<LeafDataFormat> LeafList;
-
+	public ItemDataFormat Item;
 	public int OwnLeaveNumber;
 
 

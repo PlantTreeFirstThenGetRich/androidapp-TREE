@@ -63,6 +63,9 @@ public class SuperGameMaster : MonoBehaviour {
 			case Scenes.ShopScene:
 				SceneManager.LoadSceneAsync ("ShopScene");
 				break;
+			case Scenes.Shop:
+				SceneManager.LoadSceneAsync ("Shop");
+				break;
 			default:
 				break;
 			}

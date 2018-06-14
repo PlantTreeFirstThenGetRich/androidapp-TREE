@@ -6,6 +6,7 @@ public enum Scenes
 	MainScene,
 	ShopScene,
 	InitScene,
+	Shop,
 	_Reload
 }
 

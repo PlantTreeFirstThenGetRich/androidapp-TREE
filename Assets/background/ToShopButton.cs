@@ -6,6 +6,6 @@ public class ToShopButton : MonoBehaviour {
 
 	public void OnClick (){
 		Debug.Log ("[ToShopButtonClick] click the button, and change to scene shopscene");
-		SuperGameMaster.setNextScene (Scenes.ShopScene);
+		SuperGameMaster.setNextScene (Scenes.Shop);
 	}
 }

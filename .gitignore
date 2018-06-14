@@ -2,5 +2,5 @@
 *.meta
 *.cache
 Library/
-Library/metadata/
+obj/
 Temp/
