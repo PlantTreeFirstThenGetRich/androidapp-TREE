@@ -5,7 +5,6 @@ using System.Security.Cryptography;
 public class ItemDataFormat
 {
 	public ItemDataFormat () {
-
     }
 
     public ItemDataFormat (ItemDataFormat ori) {
@@ -14,11 +13,12 @@ public class ItemDataFormat
         this.onStock = ori.onStock;
         this.isUsed = ori.isUsed;
     }
-
+    
     public String name;
     public int price;
 	public bool onStock;
 	public bool isUsed;
+
 }
 
 
