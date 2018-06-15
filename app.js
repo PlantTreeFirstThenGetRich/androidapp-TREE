@@ -14,7 +14,8 @@ http.createServer(function(req,res) {
         res.writeHead(200,{'Content-Type': 'text/html; charset=utf8'});
         // get weather
         // check city code;
-        var citycode = body.cityCode;
+        var cityName = body.cityName;
+        var citycode = city[cityName];
         if(checkNumber(citycode)==1){
             console.log("--------"+citycode+"--------");
             var weatherUrl = "http://www.weather.com.cn/data/cityinfo/"+citycode+'.html';
