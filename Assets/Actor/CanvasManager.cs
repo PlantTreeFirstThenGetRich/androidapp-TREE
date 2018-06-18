@@ -60,6 +60,8 @@ public class CanvasManager : MonoBehaviour {
             {
                 emptygrid = panel3.getEmptyGrid();
             }
+            Debug.Log("yunxingdaole");
+            Debug.Log(emptygrid);
             GameObject itemprefab = Resources.Load<GameObject>("itempacket/ItemImage");
             string imagepath = "image/"+SuperGameMaster.saveData.Item.name;
             Texture2D tt = (Texture2D)Resources.Load(imagepath) as Texture2D;
@@ -80,8 +82,8 @@ public class CanvasManager : MonoBehaviour {
         if (openornot)
         {
             ShelterControl.Instance.setShelterPanel();
-            this.LoadItems();
             packetcanvas.gameObject.SetActive(true);
+            this.LoadItems();
             showPanel1();
         }
         else
