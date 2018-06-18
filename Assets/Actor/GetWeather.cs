@@ -43,12 +43,13 @@ public class GetWeather : MonoBehaviour
         {
             net_state = false;
             Debug.Log("======Without network======");
-            txWeather.text = "连网更新天气";
+            txWeather.text = "连网更新";
         }
         else
         {
             net_state = true;
             Debug.Log("======With network======");
+			txWeather.text = "正在更新";
             StartCoroutine(GetLocation());
         }
     }
@@ -72,6 +73,7 @@ public class GetWeather : MonoBehaviour
                 {
                     // 从没有网变为有网
                     Debug.Log("----------Network changed");
+					txWeather.text = "正在更新";
                     net_state = true;
                     if (flag == 0)
                     {
@@ -142,7 +144,7 @@ public class GetWeather : MonoBehaviour
         saveWeatherToFile(tempMax, weather);
         string readWeather = SuperGameMaster.saveData.lastWeather.ToString();
 
-        txWeather.text = "";
+        
         if (readWeather=="Sunny")
         {
             if (sprites.Length == 5) { spriteRenderer.sprite = sprites[0]; }
@@ -167,6 +169,7 @@ public class GetWeather : MonoBehaviour
         {
             if (sprites.Length == 5) { spriteRenderer.sprite = sprites[0]; }
         }
+		txWeather.text = "";
     }
 
 

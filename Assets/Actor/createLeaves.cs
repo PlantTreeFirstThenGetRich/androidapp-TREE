@@ -16,7 +16,7 @@ public class createLeaves : MonoBehaviour {
 				this.tempLeafButton.GetComponent<Transform> ().SetParent (GameObject.Find ("UpCanvas").GetComponent<Transform> (), true);
 				//this.tempLeafButton.GetComponent<Transform> ().position = new Vector3 (leafDataFormat.x, leafDataFormat.y, 0);
 				//this.tempLeafButton.GetComponent<Transform> ().localScale *= 0.05f;
-				this.tempLeafButton.GetComponent<Transform> ().localScale = new Vector3 (3, 2, 0);
+				this.tempLeafButton.GetComponent<Transform> ().localScale = new Vector3 (8, 6, 0);
 
 				this.tempLeafButton.GetComponent<Transform> ().position = new Vector3 (leafDataFormat.x/100, -3.67f, 0);
 				Debug.Log ("the position of the leaf is: x: " + leafDataFormat.x + ", y: " + leafDataFormat.y);
