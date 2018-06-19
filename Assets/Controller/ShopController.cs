@@ -108,7 +108,7 @@ public class ShopController : MonoBehaviour {
 
 	public void OnClickPageUp() {
 		if(currentPage+1>MAX_PAGE){
-			// handle max_page 
+			// handle max_page
             onTips("已经是最后一页");
         }
 		else {
