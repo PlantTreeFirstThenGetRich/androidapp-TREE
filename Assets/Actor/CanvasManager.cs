@@ -48,10 +48,10 @@ public class CanvasManager : MonoBehaviour {
         if(SuperGameMaster.saveData.Item.onStock == false && SuperGameMaster.saveData.Item.isUsed == false)
         {
             Transform emptygrid;
-            if (panel1.getFullCount() < 9)
-            {
-                emptygrid = panel1.getEmptyGrid();
-            }
+            //if (panel1.getFullCount() < 9)
+            //{
+            emptygrid = panel1.grids[0];
+            /*}
             else if(panel2.getFullCount() < 9)
             {
                 emptygrid = panel2.getEmptyGrid();
@@ -59,8 +59,7 @@ public class CanvasManager : MonoBehaviour {
             else
             {
                 emptygrid = panel3.getEmptyGrid();
-            }
-            Debug.Log("yunxingdaole");
+            }*/
             Debug.Log(emptygrid);
             GameObject itemprefab = Resources.Load<GameObject>("itempacket/ItemImage");
             //string imagepath = "image/"+SuperGameMaster.saveData.Item.name;
@@ -73,9 +72,13 @@ public class CanvasManager : MonoBehaviour {
             itemini.transform.localPosition = Vector3.zero;
             itemini.transform.localScale = Vector3.one;
         }
-            panel1.setEmptyNull();
-            panel2.setEmptyNull();
-            panel3.setEmptyNull();
+        else
+        {
+            panel1.DestroyItems();
+        }
+            //panel1.setEmptyNull();
+            //panel2.setEmptyNull();
+            //panel3.setEmptyNull();
     }
 
     public void InitPacket(bool openornot,GameObject packetcanvas)

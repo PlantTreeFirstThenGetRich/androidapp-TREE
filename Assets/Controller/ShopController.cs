@@ -107,24 +107,19 @@ public class ShopController : MonoBehaviour {
 	}
 
 	public void OnClickPageUp() {
-		// TODO: click sound	
 		if(currentPage+1>MAX_PAGE){
 			// handle max_page 
-			// TODO:DEBUG
-			SuperGameMaster.saveData.Item.onStock = true;
-			SuperGameMaster.saveData.Item.isUsed = false;
-			SuperGameMaster.saveData.OwnLeaveNumber += 50;
-			SuperGameMaster.SaveDataToFile ();
-		}
+            onTips("已经是最后一页");
+        }
 		else {
 			currentPage+=1;
 		}
 	}
 
 	public void OnClickPageDown() {
-		// TODO: click sound
 		if(currentPage-1<0){
 			// handle min_page
+            onTips("已经是第一页");
 		}
 		else {
 			currentPage-=1;
@@ -132,7 +127,6 @@ public class ShopController : MonoBehaviour {
 	}
 
 	public void OnClickBuy() {	
-		// TODO: click sound
 		// check coins 
 		if(SuperGameMaster.saveData.OwnLeaveNumber >= itemData.price){
 			// success

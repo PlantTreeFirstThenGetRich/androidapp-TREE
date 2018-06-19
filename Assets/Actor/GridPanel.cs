@@ -7,12 +7,19 @@ public class GridPanel : MonoBehaviour {
 
     public Transform getEmptyGrid()
     {
-        for (int i = 0; i < grids.Length; i++)
+        int i = 0;
+        bool flag = false;
+        for (i = 0; i < grids.Length; i++)
         {
             if (grids[i].childCount == 0)
             {
-                return grids[i];
+                flag = true;
+                break;
             }
+        }
+        if (flag)
+        {
+            return grids[i];
         }
         return null;
     }

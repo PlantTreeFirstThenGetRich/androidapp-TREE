@@ -17,9 +17,9 @@ public class ItemClick : MonoBehaviour {
         panel1.DestroyItems();
         panel2.DestroyItems();
         panel3.DestroyItems();
-        panel1.setEmptyNull();
-        panel2.setEmptyNull();
-        panel3.setEmptyNull();
+        //panel1.setEmptyNull();
+        //panel2.setEmptyNull();
+        //panel3.setEmptyNull();
         CanvasManager.Instance.LoadItems();
     }
 }
