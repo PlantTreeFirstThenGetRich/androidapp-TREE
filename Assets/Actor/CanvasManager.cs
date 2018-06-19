@@ -63,7 +63,8 @@ public class CanvasManager : MonoBehaviour {
             Debug.Log("yunxingdaole");
             Debug.Log(emptygrid);
             GameObject itemprefab = Resources.Load<GameObject>("itempacket/ItemImage");
-            string imagepath = "image/"+SuperGameMaster.saveData.Item.name;
+            //string imagepath = "image/"+SuperGameMaster.saveData.Item.name;
+            string imagepath = "image/Nest";
             Texture2D tt = (Texture2D)Resources.Load(imagepath) as Texture2D;
             Sprite k = Sprite.Create(tt, new Rect(0, 0, tt.width, tt.height), new Vector2(0.5f, 0.5f));
             itemprefab.GetComponent<Image>().sprite = k;
